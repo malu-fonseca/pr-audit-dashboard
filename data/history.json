@@ -1,1 +1,85 @@
-[]
+[
+  {
+    "date": "2026-08-13",
+    "messageId": "1537793355147251752",
+    "entries": [
+      {
+        "repo": "neo-omnichannel",
+        "prNumber": 3786,
+        "title": "hotfix/insert-batches",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/neo-omnichannel/pull-requests/3786",
+        "author": "Lorenzo Augusto Colome",
+        "destino": "master",
+        "reviewers": ["Luiza Daiane Rabuski"],
+        "faltam": 1,
+        "category": "medio"
+      },
+      {
+        "repo": "front-vue-omni-admin",
+        "prNumber": 2167,
+        "title": "EC-2956 - Ajustes recarga bonificada",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/front-vue-omni-admin/pull-requests/2167",
+        "author": "Geórgia G da Rosa",
+        "destino": "master",
+        "reviewers": ["Matheus Reusch"],
+        "faltam": 1,
+        "category": "medio"
+      },
+      {
+        "repo": "frontend-eleven-360-internacional",
+        "prNumber": 448,
+        "title": "E11-13136 ctz Integração Insider Básica e Avançada",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/frontend-eleven-360-internacional/pull-requests/448",
+        "author": "Anderson Keller",
+        "destino": "master",
+        "reviewers": ["Eduardo Wegner"],
+        "faltam": 1,
+        "category": "medio"
+      },
+      {
+        "repo": "backend-cashless",
+        "prNumber": 2345,
+        "title": "[ECASH-3722] Suprimido warning de auditoria sem usuario no sentry e corrigida rota do totem login",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/backend-cashless/pull-requests/2345",
+        "author": "Vinícius Rehbein Kobs",
+        "destino": "master",
+        "reviewers": ["Marson de Souza"],
+        "faltam": 1,
+        "category": "medio"
+      },
+      {
+        "repo": "we8",
+        "prNumber": 713,
+        "title": "E11-13079 | ElevenTickets - Removendo titular do convidado e adicionando mensagem no cadastro de portador quando nao tiver convidado",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/we8/pull-requests/713",
+        "author": "Émerson Rodrigues de Oliveira",
+        "destino": "release/master-prod",
+        "reviewers": ["Maurício Helfer Kretzmann"],
+        "faltam": 1,
+        "category": "medio"
+      },
+      {
+        "repo": "frontend-circus-credenciamento-imply-vue3",
+        "prNumber": 156,
+        "title": "Hotfix/sessao expirada cache deploy",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/frontend-circus-credenciamento-imply-vue3/pull-requests/156",
+        "author": "Marcos Antonio Andrade Piemontez",
+        "destino": "master",
+        "reviewers": [],
+        "faltam": 2,
+        "category": "inadmissivel"
+      },
+      {
+        "repo": "frontend-membership-imply",
+        "prNumber": 442,
+        "title": "feat: E11-13360 - configuração da identificacao do dependente na adesao via CMS",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/frontend-membership-imply/pull-requests/442",
+        "author": "Anderson Keller",
+        "destino": "master",
+        "reviewers": [],
+        "faltam": 2,
+        "category": "inadmissivel"
+      }
+    ]
+  }
+]

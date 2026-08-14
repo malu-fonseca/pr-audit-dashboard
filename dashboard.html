@@ -1,0 +1,753 @@
+<title>Auditoria de Revisores</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page: #f9f9f7;
+    --surface: #fcfcfb;
+    --surface-raised: #ffffff;
+    --ink: #0b0b0b;
+    --ink-secondary: #52514e;
+    --ink-muted: #898781;
+    --gridline: #e1e0d9;
+    --baseline: #c3c2b7;
+    --border: rgba(11, 11, 11, 0.1);
+    --accent: #2a78d6;
+    --accent-wash: rgba(42, 120, 214, 0.1);
+    --critical: #d03b3b;
+    --critical-wash: rgba(208, 59, 59, 0.1);
+    --warning: #b8790a;
+    --warning-fg: #fab219;
+    --warning-wash: rgba(250, 178, 25, 0.16);
+    --focus-ring: #2a78d6;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --page: #0d0d0d;
+      --surface: #1a1a19;
+      --surface-raised: #212120;
+      --ink: #ffffff;
+      --ink-secondary: #c3c2b7;
+      --ink-muted: #898781;
+      --gridline: #2c2c2a;
+      --baseline: #383835;
+      --border: rgba(255, 255, 255, 0.1);
+      --accent: #3987e5;
+      --accent-wash: rgba(57, 135, 229, 0.16);
+      --critical: #e66767;
+      --critical-wash: rgba(230, 103, 103, 0.14);
+      --warning: #fab219;
+      --warning-fg: #fab219;
+      --warning-wash: rgba(250, 178, 25, 0.14);
+      --focus-ring: #3987e5;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #0d0d0d;
+    --surface: #1a1a19;
+    --surface-raised: #212120;
+    --ink: #ffffff;
+    --ink-secondary: #c3c2b7;
+    --ink-muted: #898781;
+    --gridline: #2c2c2a;
+    --baseline: #383835;
+    --border: rgba(255, 255, 255, 0.1);
+    --accent: #3987e5;
+    --accent-wash: rgba(57, 135, 229, 0.16);
+    --critical: #e66767;
+    --critical-wash: rgba(230, 103, 103, 0.14);
+    --warning: #fab219;
+    --warning-fg: #fab219;
+    --warning-wash: rgba(250, 178, 25, 0.14);
+    --focus-ring: #3987e5;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 32px 24px 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  header.masthead {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px 24px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 20px;
+  }
+
+  .masthead-title {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  .masthead-sub {
+    margin: 0;
+    color: var(--ink-secondary);
+    font-size: 0.9rem;
+  }
+
+  .scope-note {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: 0.82rem;
+    text-align: right;
+  }
+
+  .filter-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .segmented {
+    display: inline-flex;
+    padding: 3px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    gap: 2px;
+  }
+
+  .segmented button {
+    appearance: none;
+    border: none;
+    background: transparent;
+    color: var(--ink-secondary);
+    font: inherit;
+    font-size: 0.86rem;
+    font-weight: 600;
+    padding: 7px 14px;
+    border-radius: 7px;
+    cursor: pointer;
+  }
+
+  .segmented button:hover {
+    color: var(--ink);
+  }
+
+  .segmented button:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  .segmented button[aria-pressed="true"] {
+    background: var(--accent);
+    color: #ffffff;
+  }
+
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+  }
+
+  .stat-tile {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .stat-tile .stripe {
+    height: 3px;
+    width: 32px;
+    border-radius: 2px;
+    margin-bottom: 4px;
+  }
+
+  .stat-value {
+    font-size: 1.9rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.82rem;
+    color: var(--ink-secondary);
+  }
+
+  .panels {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 16px;
+    align-items: start;
+  }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .panel-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .panel-head .icon {
+    font-size: 1.1rem;
+    line-height: 1;
+  }
+
+  .panel-head h2 {
+    font-size: 0.95rem;
+    margin: 0;
+    flex: 1;
+  }
+
+  .panel-head .count {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+
+  .panel[data-severity="inadmissivel"] .panel-head .count {
+    color: var(--critical);
+  }
+
+  .panel[data-severity="medio"] .panel-head .count {
+    color: var(--warning);
+  }
+
+  .entry-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 420px;
+    overflow-y: auto;
+  }
+
+  .entry {
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .entry:last-child {
+    border-bottom: none;
+  }
+
+  .entry-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .entry-repo {
+    font-weight: 600;
+    font-size: 0.88rem;
+  }
+
+  .entry-pr {
+    color: var(--ink-muted);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.82rem;
+    white-space: nowrap;
+  }
+
+  .entry-title {
+    font-size: 0.86rem;
+    color: var(--ink-secondary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .entry-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
+    font-size: 0.78rem;
+    color: var(--ink-muted);
+  }
+
+  .entry-meta a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .entry-meta a:hover,
+  .entry-meta a:focus-visible {
+    text-decoration: underline;
+  }
+
+  .date-chip {
+    background: var(--gridline);
+    color: var(--ink-secondary);
+    border-radius: 999px;
+    padding: 1px 8px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .empty-state {
+    padding: 32px 18px;
+    text-align: center;
+    color: var(--ink-muted);
+    font-size: 0.88rem;
+  }
+
+  .chart-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px 8px;
+  }
+
+  .chart-panel h2 {
+    font-size: 0.95rem;
+    margin: 0 0 4px;
+  }
+
+  .chart-panel .chart-sub {
+    margin: 0 0 18px;
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+  }
+
+  .chart-wrap {
+    overflow-x: auto;
+  }
+
+  .bar-chart {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 64px;
+    height: 220px;
+    padding: 8px 8px 0;
+    position: relative;
+    min-width: 320px;
+  }
+
+  .bar-chart::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 32px 0;
+    background-image: repeating-linear-gradient(
+      to top,
+      var(--gridline) 0,
+      var(--gridline) 1px,
+      transparent 1px,
+      transparent 25%
+    );
+    pointer-events: none;
+  }
+
+  .bar-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 96px;
+    height: 100%;
+    justify-content: flex-end;
+    position: relative;
+  }
+
+  .bar-value {
+    font-weight: 700;
+    font-size: 1.1rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .bar {
+    width: 56px;
+    border-radius: 6px 6px 3px 3px;
+    transition: height 0.25s ease;
+    min-height: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bar {
+      transition: none;
+    }
+  }
+
+  .bar[data-severity="inadmissivel"] {
+    background: var(--critical);
+  }
+
+  .bar[data-severity="medio"] {
+    background: var(--warning-fg);
+  }
+
+  .bar-col:hover .bar {
+    filter: brightness(1.08);
+  }
+
+  .bar-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    color: var(--ink-secondary);
+    font-weight: 600;
+    padding-bottom: 12px;
+    border-top: 1px solid var(--baseline);
+    padding-top: 10px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .bar-label .swatch {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+  }
+
+  .bar-label .swatch[data-severity="inadmissivel"] {
+    background: var(--critical);
+  }
+
+  .bar-label .swatch[data-severity="medio"] {
+    background: var(--warning-fg);
+  }
+
+  footer.source-note {
+    color: var(--ink-muted);
+    font-size: 0.78rem;
+    text-align: center;
+    padding-top: 8px;
+  }
+</style>
+
+<div class="page">
+  <header class="masthead">
+    <div class="masthead-title">
+      <h1>Auditoria de Revisores</h1>
+      <p class="masthead-sub">ISO 27001 &middot; Bitbucket &middot; PRs com menos de 2 revisores distintos do autor</p>
+    </div>
+    <p class="scope-note" id="scope-note"></p>
+  </header>
+
+  <div class="filter-row" role="group" aria-label="Período">
+    <div class="segmented">
+      <button type="button" id="filter-latest" aria-pressed="true">Último dia analisado</button>
+      <button type="button" id="filter-all" aria-pressed="false">Todo o período</button>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-tile">
+      <span class="stripe" style="background: var(--critical)"></span>
+      <span class="stat-value" id="stat-inadmissivel">0</span>
+      <span class="stat-label">⛔ Inadmissível &mdash; nenhum revisor</span>
+    </div>
+    <div class="stat-tile">
+      <span class="stripe" style="background: var(--warning-fg)"></span>
+      <span class="stat-value" id="stat-medio">0</span>
+      <span class="stat-label">⚠️ Médio &mdash; falta 1 revisor</span>
+    </div>
+    <div class="stat-tile">
+      <span class="stripe" style="background: var(--baseline)"></span>
+      <span class="stat-value" id="stat-total">0</span>
+      <span class="stat-label">Total de PRs não conformes</span>
+    </div>
+  </div>
+
+  <div class="panels">
+    <section class="panel" data-severity="inadmissivel">
+      <div class="panel-head">
+        <span class="icon">⛔</span>
+        <h2>Inadmissível</h2>
+        <span class="count" id="count-inadmissivel">0</span>
+      </div>
+      <ul class="entry-list" id="list-inadmissivel"></ul>
+    </section>
+    <section class="panel" data-severity="medio">
+      <div class="panel-head">
+        <span class="icon">⚠️</span>
+        <h2>Médio</h2>
+        <span class="count" id="count-medio">0</span>
+      </div>
+      <ul class="entry-list" id="list-medio"></ul>
+    </section>
+  </div>
+
+  <div class="chart-panel">
+    <h2>PRs não conformes por categoria</h2>
+    <p class="chart-sub" id="chart-sub">Referente ao período selecionado acima.</p>
+    <div class="chart-wrap">
+      <div class="bar-chart" id="bar-chart" role="img" aria-label="Gráfico de barras comparando PRs Inadmissível e Médio">
+        <div class="bar-col">
+          <span class="bar-value" id="bar-value-inadmissivel">0</span>
+          <div class="bar" data-severity="inadmissivel" id="bar-inadmissivel"></div>
+          <span class="bar-label"><span class="swatch" data-severity="inadmissivel"></span>Inadmissível</span>
+        </div>
+        <div class="bar-col">
+          <span class="bar-value" id="bar-value-medio">0</span>
+          <div class="bar" data-severity="medio" id="bar-medio"></div>
+          <span class="bar-label"><span class="swatch" data-severity="medio"></span>Médio</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="source-note">Alimentado automaticamente a partir do canal de auditoria do Discord, uma vez por dia.</footer>
+</div>
+
+<script type="application/json" id="history-data">
+[
+  {
+    "date": "2026-08-13",
+    "messageId": "1537793355147251752",
+    "entries": [
+      {
+        "repo": "neo-omnichannel",
+        "prNumber": 3786,
+        "title": "hotfix/insert-batches",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/neo-omnichannel/pull-requests/3786",
+        "author": "Lorenzo Augusto Colome",
+        "destino": "master",
+        "reviewers": ["Luiza Daiane Rabuski"],
+        "faltam": 1,
+        "category": "medio"
+      },
+      {
+        "repo": "front-vue-omni-admin",
+        "prNumber": 2167,
+        "title": "EC-2956 - Ajustes recarga bonificada",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/front-vue-omni-admin/pull-requests/2167",
+        "author": "Geórgia G da Rosa",
+        "destino": "master",
+        "reviewers": ["Matheus Reusch"],
+        "faltam": 1,
+        "category": "medio"
+      },
+      {
+        "repo": "frontend-eleven-360-internacional",
+        "prNumber": 448,
+        "title": "E11-13136 ctz Integração Insider Básica e Avançada",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/frontend-eleven-360-internacional/pull-requests/448",
+        "author": "Anderson Keller",
+        "destino": "master",
+        "reviewers": ["Eduardo Wegner"],
+        "faltam": 1,
+        "category": "medio"
+      },
+      {
+        "repo": "backend-cashless",
+        "prNumber": 2345,
+        "title": "[ECASH-3722] Suprimido warning de auditoria sem usuario no sentry e corrigida rota do totem login",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/backend-cashless/pull-requests/2345",
+        "author": "Vinícius Rehbein Kobs",
+        "destino": "master",
+        "reviewers": ["Marson de Souza"],
+        "faltam": 1,
+        "category": "medio"
+      },
+      {
+        "repo": "we8",
+        "prNumber": 713,
+        "title": "E11-13079 | ElevenTickets - Removendo titular do convidado e adicionando mensagem no cadastro de portador quando nao tiver convidado",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/we8/pull-requests/713",
+        "author": "Émerson Rodrigues de Oliveira",
+        "destino": "release/master-prod",
+        "reviewers": ["Maurício Helfer Kretzmann"],
+        "faltam": 1,
+        "category": "medio"
+      },
+      {
+        "repo": "frontend-circus-credenciamento-imply-vue3",
+        "prNumber": 156,
+        "title": "Hotfix/sessao expirada cache deploy",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/frontend-circus-credenciamento-imply-vue3/pull-requests/156",
+        "author": "Marcos Antonio Andrade Piemontez",
+        "destino": "master",
+        "reviewers": [],
+        "faltam": 2,
+        "category": "inadmissivel"
+      },
+      {
+        "repo": "frontend-membership-imply",
+        "prNumber": 442,
+        "title": "feat: E11-13360 - configuração da identificacao do dependente na adesao via CMS",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/frontend-membership-imply/pull-requests/442",
+        "author": "Anderson Keller",
+        "destino": "master",
+        "reviewers": [],
+        "faltam": 2,
+        "category": "inadmissivel"
+      }
+    ]
+  }
+]
+</script>
+
+<script>
+  (function () {
+    "use strict";
+
+    var HISTORY = JSON.parse(document.getElementById("history-data").textContent);
+    HISTORY.sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+
+    var state = { scope: "latest" };
+
+    function formatDate(iso) {
+      var parts = iso.split("-");
+      var d = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+      return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" });
+    }
+
+    function formatDateShort(iso) {
+      var parts = iso.split("-");
+      return parts[2] + "/" + parts[1];
+    }
+
+    function getScopedDays() {
+      if (HISTORY.length === 0) return [];
+      if (state.scope === "latest") return [HISTORY[HISTORY.length - 1]];
+      return HISTORY;
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function renderEntry(entry, day, showDate) {
+      var li = document.createElement("li");
+      li.className = "entry";
+
+      var reviewersText = entry.reviewers.length ? entry.reviewers.join(", ") : "nenhum revisor";
+
+      li.innerHTML =
+        '<div class="entry-top">' +
+          '<span class="entry-repo">' + escapeHtml(entry.repo) + "</span>" +
+          '<span class="entry-pr">#' + escapeHtml(entry.prNumber) + "</span>" +
+        "</div>" +
+        '<div class="entry-title">' + escapeHtml(entry.title) + "</div>" +
+        '<div class="entry-meta">' +
+          "<span>" + escapeHtml(entry.author) + "</span>" +
+          "<span>&rarr; " + escapeHtml(entry.destino) + "</span>" +
+          "<span>Revisores: " + escapeHtml(reviewersText) + "</span>" +
+          (showDate ? '<span class="date-chip">' + formatDateShort(day.date) + "</span>" : "") +
+          '<a href="' + encodeURI(entry.link) + '" target="_blank" rel="noopener noreferrer">Ver PR &#8599;</a>' +
+        "</div>";
+      return li;
+    }
+
+    function render() {
+      var days = getScopedDays();
+      var showDate = state.scope === "all";
+
+      var listInadmissivel = document.getElementById("list-inadmissivel");
+      var listMedio = document.getElementById("list-medio");
+      listInadmissivel.innerHTML = "";
+      listMedio.innerHTML = "";
+
+      var countInadmissivel = 0;
+      var countMedio = 0;
+
+      days.forEach(function (day) {
+        day.entries.forEach(function (entry) {
+          if (entry.category === "inadmissivel") {
+            countInadmissivel++;
+            listInadmissivel.appendChild(renderEntry(entry, day, showDate));
+          } else {
+            countMedio++;
+            listMedio.appendChild(renderEntry(entry, day, showDate));
+          }
+        });
+      });
+
+      if (countInadmissivel === 0) {
+        listInadmissivel.innerHTML = '<li class="empty-state">Nenhum PR inadmissível no período. ✅</li>';
+      }
+      if (countMedio === 0) {
+        listMedio.innerHTML = '<li class="empty-state">Nenhum PR médio no período. ✅</li>';
+      }
+
+      document.getElementById("count-inadmissivel").textContent = countInadmissivel;
+      document.getElementById("count-medio").textContent = countMedio;
+      document.getElementById("stat-inadmissivel").textContent = countInadmissivel;
+      document.getElementById("stat-medio").textContent = countMedio;
+      document.getElementById("stat-total").textContent = countInadmissivel + countMedio;
+
+      var maxCount = Math.max(countInadmissivel, countMedio, 1);
+      var trackHeight = 160;
+      document.getElementById("bar-inadmissivel").style.height = Math.max(3, (countInadmissivel / maxCount) * trackHeight) + "px";
+      document.getElementById("bar-medio").style.height = Math.max(3, (countMedio / maxCount) * trackHeight) + "px";
+      document.getElementById("bar-value-inadmissivel").textContent = countInadmissivel;
+      document.getElementById("bar-value-medio").textContent = countMedio;
+
+      var scopeNote = document.getElementById("scope-note");
+      var chartSub = document.getElementById("chart-sub");
+      if (days.length === 0) {
+        scopeNote.textContent = "Sem dados ainda";
+        chartSub.textContent = "Sem dados ainda.";
+      } else if (state.scope === "latest") {
+        scopeNote.textContent = "Dados de " + formatDate(days[0].date);
+        chartSub.textContent = "Referente a " + formatDate(days[0].date) + ".";
+      } else {
+        scopeNote.textContent = days.length + " dia(s) analisado(s), de " + formatDate(HISTORY[0].date) + " a " + formatDate(HISTORY[HISTORY.length - 1].date);
+        chartSub.textContent = "Somando todos os " + days.length + " dias analisados até agora.";
+      }
+    }
+
+    document.getElementById("filter-latest").addEventListener("click", function () {
+      state.scope = "latest";
+      document.getElementById("filter-latest").setAttribute("aria-pressed", "true");
+      document.getElementById("filter-all").setAttribute("aria-pressed", "false");
+      render();
+    });
+
+    document.getElementById("filter-all").addEventListener("click", function () {
+      state.scope = "all";
+      document.getElementById("filter-all").setAttribute("aria-pressed", "true");
+      document.getElementById("filter-latest").setAttribute("aria-pressed", "false");
+      render();
+    });
+
+    render();
+  })();
+</script>
