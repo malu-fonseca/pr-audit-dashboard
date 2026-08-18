@@ -1,10 +1,11 @@
 'use strict';
 
 const DISCORD_API = 'https://discord.com/api/v10';
-// The bot's header text has changed format before (e.g. losing the leading
-// emoji, moving the date to its own line), so match loosely on the constant
-// part instead of the exact original string.
-const AUDIT_HEADER_RE = /Auditoria ISO 27001/;
+// The bot's title/header text has changed wording more than once (emoji
+// dropped, date moved to its own line, etc.) and isn't reliable to match on.
+// The "PRs NÃO CONFORMES" marker that opens the data block has stayed
+// constant across every format seen so far, so that's the anchor used to
+// recognize an audit message at all.
 const NAO_CONFORMES_MARKER = /⚠️\s*PRs NÃO CONFORMES/;
 const VERIFICAR_MANUALMENTE_MARKER = '🔍 Verificar manualmente';
 const CONTINUATION_WINDOW_MS = 60 * 1000;
@@ -130,12 +131,13 @@ async function fetchRecentMessages(token, channelId, limit) {
 
 // The daily digest can exceed Discord's 2000-char message limit, so the bot
 // splits it across consecutive messages. Only the first one carries the
-// audit header — everything that follows within a short window and comes
-// from the same sender is a continuation and gets stitched back together.
+// "PRs NÃO CONFORMES" block — everything that follows within a short window
+// and comes from the same sender is a continuation and gets stitched back
+// together.
 function findLatestAuditGroup(messages) {
   let headerIndex = -1;
   for (let i = messages.length - 1; i >= 0; i--) {
-    if (AUDIT_HEADER_RE.test(messages[i].content.split('\n')[0])) {
+    if (NAO_CONFORMES_MARKER.test(messages[i].content)) {
       headerIndex = i;
       break;
     }
@@ -149,7 +151,7 @@ function findLatestAuditGroup(messages) {
     const ts = new Date(msg.timestamp).getTime();
     const sameSender = msg.author?.id === messages[headerIndex].author?.id;
     const withinWindow = ts - lastTimestamp <= CONTINUATION_WINDOW_MS;
-    if (!sameSender || !withinWindow || AUDIT_HEADER_RE.test(msg.content.split('\n')[0])) break;
+    if (!sameSender || !withinWindow || NAO_CONFORMES_MARKER.test(msg.content)) break;
     group.push(msg);
     lastTimestamp = ts;
   }
@@ -165,7 +167,7 @@ async function fetchAndParse({ token, channelId } = {}) {
   const messages = await fetchRecentMessages(botToken, channel, 25);
   const group = findLatestAuditGroup(messages);
   if (!group) {
-    throw new Error('Nenhuma mensagem de auditoria (🔐 Auditoria ISO 27001) encontrada nas últimas 25 mensagens do canal.');
+    throw new Error('Nenhuma mensagem de auditoria (bloco "⚠️ PRs NÃO CONFORMES") encontrada nas últimas 25 mensagens do canal.');
   }
   const combinedContent = group.map((m) => m.content).join('\n');
   const { date, entries } = parseAuditMessage(combinedContent);
