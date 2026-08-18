@@ -1,7 +1,10 @@
 'use strict';
 
 const DISCORD_API = 'https://discord.com/api/v10';
-const AUDIT_HEADER = '🔐 Auditoria ISO 27001';
+// The bot's header text has changed format before (e.g. losing the leading
+// emoji, moving the date to its own line), so match loosely on the constant
+// part instead of the exact original string.
+const AUDIT_HEADER_RE = /Auditoria ISO 27001/;
 const NAO_CONFORMES_MARKER = /⚠️\s*PRs NÃO CONFORMES/;
 const VERIFICAR_MANUALMENTE_MARKER = '🔍 Verificar manualmente';
 const CONTINUATION_WINDOW_MS = 60 * 1000;
@@ -17,8 +20,12 @@ function stripMarkdown(content) {
 }
 
 function extractDate(content) {
-  const firstLine = content.split('\n')[0];
-  const m = firstLine.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+  // The date used to sit at the end of the header line; it now sits on its
+  // own line right after. Search the header area (before the entries start)
+  // instead of assuming a fixed line.
+  const headerEnd = content.search(NAO_CONFORMES_MARKER);
+  const header = headerEnd === -1 ? content : content.slice(0, headerEnd);
+  const m = header.match(/(\d{2})\/(\d{2})\/(\d{4})/);
   if (!m) return null;
   const [, dd, mm, yyyy] = m;
   return `${yyyy}-${mm}-${dd}`;
@@ -46,14 +53,17 @@ function parseEntries(block) {
   for (const chunk of chunks) {
     const lines = chunk.split('\n').map((l) => l.trim()).filter(Boolean);
 
-    const headerMatch = lines[0].match(/⚠️\s*([^\s#]+)\s*#(\d+)\s*—\s*(.+)/);
+    // Some days the bot prefixes each entry with a running index ("1. ", "2. ")
+    // before the repo name; tolerate it either way.
+    const headerMatch = lines[0].match(/⚠️\s*(?:\d+\.\s*)?([^\s#]+)\s*#(\d+)\s*—\s*(.+)/);
     if (!headerMatch) {
       console.warn(`Aviso: não consegui interpretar o cabeçalho do PR, ignorando: "${lines[0]}"`);
       continue;
     }
     const [, repo, prNumber, title] = headerMatch;
 
-    const linkLine = lines.find((l) => l.startsWith('Link:'));
+    // The bot used to label this "Link: <url>"; it now just posts the bare URL.
+    const linkLine = lines.find((l) => l.startsWith('Link:') || l.startsWith('http'));
     const link = linkLine ? linkLine.replace(/^Link:\s*/, '').trim() : null;
 
     const autorLine = lines.find((l) => l.startsWith('Autor:'));
@@ -125,7 +135,7 @@ async function fetchRecentMessages(token, channelId, limit) {
 function findLatestAuditGroup(messages) {
   let headerIndex = -1;
   for (let i = messages.length - 1; i >= 0; i--) {
-    if (messages[i].content.startsWith(AUDIT_HEADER)) {
+    if (AUDIT_HEADER_RE.test(messages[i].content.split('\n')[0])) {
       headerIndex = i;
       break;
     }
@@ -139,7 +149,7 @@ function findLatestAuditGroup(messages) {
     const ts = new Date(msg.timestamp).getTime();
     const sameSender = msg.author?.id === messages[headerIndex].author?.id;
     const withinWindow = ts - lastTimestamp <= CONTINUATION_WINDOW_MS;
-    if (!sameSender || !withinWindow || msg.content.startsWith(AUDIT_HEADER)) break;
+    if (!sameSender || !withinWindow || AUDIT_HEADER_RE.test(msg.content.split('\n')[0])) break;
     group.push(msg);
     lastTimestamp = ts;
   }
