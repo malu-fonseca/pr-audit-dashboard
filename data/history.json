@@ -10,7 +10,9 @@
         "link": "https://bitbucket.org/implytecnologiaeletronica/neo-omnichannel/pull-requests/3786",
         "author": "Lorenzo Augusto Colome",
         "destino": "master",
-        "reviewers": ["Luiza Daiane Rabuski"],
+        "reviewers": [
+          "Luiza Daiane Rabuski"
+        ],
         "faltam": 1,
         "category": "medio"
       },
@@ -21,7 +23,9 @@
         "link": "https://bitbucket.org/implytecnologiaeletronica/front-vue-omni-admin/pull-requests/2167",
         "author": "Geórgia G da Rosa",
         "destino": "master",
-        "reviewers": ["Matheus Reusch"],
+        "reviewers": [
+          "Matheus Reusch"
+        ],
         "faltam": 1,
         "category": "medio"
       },
@@ -32,7 +36,9 @@
         "link": "https://bitbucket.org/implytecnologiaeletronica/frontend-eleven-360-internacional/pull-requests/448",
         "author": "Anderson Keller",
         "destino": "master",
-        "reviewers": ["Eduardo Wegner"],
+        "reviewers": [
+          "Eduardo Wegner"
+        ],
         "faltam": 1,
         "category": "medio"
       },
@@ -43,7 +49,9 @@
         "link": "https://bitbucket.org/implytecnologiaeletronica/backend-cashless/pull-requests/2345",
         "author": "Vinícius Rehbein Kobs",
         "destino": "master",
-        "reviewers": ["Marson de Souza"],
+        "reviewers": [
+          "Marson de Souza"
+        ],
         "faltam": 1,
         "category": "medio"
       },
@@ -54,7 +62,9 @@
         "link": "https://bitbucket.org/implytecnologiaeletronica/we8/pull-requests/713",
         "author": "Émerson Rodrigues de Oliveira",
         "destino": "release/master-prod",
-        "reviewers": ["Maurício Helfer Kretzmann"],
+        "reviewers": [
+          "Maurício Helfer Kretzmann"
+        ],
         "faltam": 1,
         "category": "medio"
       },
@@ -75,6 +85,199 @@
         "title": "feat: E11-13360 - configuração da identificacao do dependente na adesao via CMS",
         "link": "https://bitbucket.org/implytecnologiaeletronica/frontend-membership-imply/pull-requests/442",
         "author": "Anderson Keller",
+        "destino": "master",
+        "reviewers": [],
+        "faltam": 2,
+        "category": "inadmissivel"
+      }
+    ]
+  },
+  {
+    "date": "2026-08-17",
+    "messageId": "1539234538725707816",
+    "entries": [
+      {
+        "repo": "we",
+        "prNumber": 6002,
+        "title": "E11-13018 | Base - Melhorias no push e correção no bug de contagem",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/we/pull-requests/6002",
+        "author": "Eduardo Nunes",
+        "destino": "master",
+        "reviewers": [
+          "Eduardo Wegner"
+        ],
+        "faltam": 1,
+        "category": "medio"
+      },
+      {
+        "repo": "front-vue-omni-admin",
+        "prNumber": 2180,
+        "title": "EC-3016 - Ajustes nos campos do modal do equipamento",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/front-vue-omni-admin/pull-requests/2180",
+        "author": "Geórgia G da Rosa",
+        "destino": "master",
+        "reviewers": [
+          "Matheus Reusch"
+        ],
+        "faltam": 1,
+        "category": "medio"
+      },
+      {
+        "repo": "front-vue-omni-admin",
+        "prNumber": 2177,
+        "title": "EC-3016 - Campo de combos no equipamento",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/front-vue-omni-admin/pull-requests/2177",
+        "author": "Geórgia G da Rosa",
+        "destino": "master",
+        "reviewers": [
+          "Matheus Reusch"
+        ],
+        "faltam": 1,
+        "category": "medio"
+      },
+      {
+        "repo": "backend-cashless",
+        "prNumber": 2357,
+        "title": "Adicionado o summarizedInventories na exportação.",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/backend-cashless/pull-requests/2357",
+        "author": "Marson de Souza",
+        "destino": "master",
+        "reviewers": [],
+        "faltam": 2,
+        "category": "inadmissivel"
+      },
+      {
+        "repo": "frontend-cashless",
+        "prNumber": 1486,
+        "title": "Fix para listar os usuarios sem paginacao.",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/frontend-cashless/pull-requests/1486",
+        "author": "Marson de Souza",
+        "destino": "master",
+        "reviewers": [
+          "Gabriel Seidel Reckziegel"
+        ],
+        "faltam": 1,
+        "category": "medio"
+      },
+      {
+        "repo": "frontend-cashless",
+        "prNumber": 1485,
+        "title": "Feature/ecash 3745 busca de usuario por email",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/frontend-cashless/pull-requests/1485",
+        "author": "Vinícius Rehbein Kobs",
+        "destino": "release/v1.43",
+        "reviewers": [
+          "João Vitor Neuvald"
+        ],
+        "faltam": 1,
+        "category": "medio"
+      },
+      {
+        "repo": "frontend-cashless",
+        "prNumber": 1482,
+        "title": "ECASH-3738- ajustando modal de editar evento no mobile possibilitando utilizar os botões de cancelar e salvar",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/frontend-cashless/pull-requests/1482",
+        "author": "Vinicius Lima dos Santos",
+        "destino": "release/v1.43",
+        "reviewers": [
+          "Gabriel Seidel Reckziegel"
+        ],
+        "faltam": 1,
+        "category": "medio"
+      },
+      {
+        "repo": "frontend-cashless",
+        "prNumber": 1484,
+        "title": "Ajustado o nome do end point que é chamado.",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/frontend-cashless/pull-requests/1484",
+        "author": "Marson de Souza",
+        "destino": "master",
+        "reviewers": [
+          "Gabriel Seidel Reckziegel"
+        ],
+        "faltam": 1,
+        "category": "medio"
+      },
+      {
+        "repo": "frontend-cashless",
+        "prNumber": 1483,
+        "title": "[ECASH-3737] Corrigido registro de usuario na tela de edicao de evento",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/frontend-cashless/pull-requests/1483",
+        "author": "Vinícius Rehbein Kobs",
+        "destino": "release/v1.43",
+        "reviewers": [
+          "Gabriel Seidel Reckziegel"
+        ],
+        "faltam": 1,
+        "category": "medio"
+      },
+      {
+        "repo": "eleven-cash",
+        "prNumber": 911,
+        "title": "Feature/ECASH-3741 total consumed",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/eleven-cash/pull-requests/911",
+        "author": "Leonardo Bencke",
+        "destino": "main",
+        "reviewers": [
+          "Gabriel Werner Kuhn"
+        ],
+        "faltam": 1,
+        "category": "medio"
+      },
+      {
+        "repo": "we8",
+        "prNumber": 686,
+        "title": "E11-11472 | Gestão Sócio - Novo plugin para desconto na aquisição do 2° plano.",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/we8/pull-requests/686",
+        "author": "Leonardo André Müller",
+        "destino": "release/master-prod",
+        "reviewers": [
+          "Eduardo Wegner"
+        ],
+        "faltam": 1,
+        "category": "medio"
+      },
+      {
+        "repo": "frontend-circus-credenciamento-imply-vue3",
+        "prNumber": 158,
+        "title": "Hotfix/sessao expirada cache deploy",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/frontend-circus-credenciamento-imply-vue3/pull-requests/158",
+        "author": "Marcos Antonio Andrade Piemontez",
+        "destino": "master",
+        "reviewers": [],
+        "faltam": 2,
+        "category": "inadmissivel"
+      },
+      {
+        "repo": "frontend-facial-onboarding-painel-imply",
+        "prNumber": 65,
+        "title": "chore: limpeza de arquivo bitbucket-pipelines",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/frontend-facial-onboarding-painel-imply/pull-requests/65",
+        "author": "Marcos Antonio Andrade Piemontez",
+        "destino": "master",
+        "reviewers": [
+          "Anderson Roberto Pranke"
+        ],
+        "faltam": 1,
+        "category": "medio"
+      },
+      {
+        "repo": "frontend-pay-painel-lojista",
+        "prNumber": 20,
+        "title": "E11-12890 | PayDash - Melhorando UI e removendo chamadas duplicadas a API",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/frontend-pay-painel-lojista/pull-requests/20",
+        "author": "Jean Lamego",
+        "destino": "master",
+        "reviewers": [],
+        "faltam": 2,
+        "category": "inadmissivel"
+      },
+      {
+        "repo": "taa-ecommerce",
+        "prNumber": 47,
+        "title": "Development",
+        "link": "https://bitbucket.org/implytecnologiaeletronica/taa-ecommerce/pull-requests/47",
+        "author": "Pedro Augusto Müller",
         "destino": "master",
         "reviewers": [],
         "faltam": 2,
