@@ -21,15 +21,26 @@ function stripMarkdown(content) {
 }
 
 function extractDate(content) {
-  // The date used to sit at the end of the header line; it now sits on its
-  // own line right after. Search the header area (before the entries start)
-  // instead of assuming a fixed line.
+  // The date's position and separator have both moved around before (own
+  // line, "Data analisada:" label, "/" vs "-"). Search the header area
+  // (before the entries start) and accept either dd/mm/yyyy or yyyy-mm-dd
+  // instead of assuming one fixed layout.
   const headerEnd = content.search(NAO_CONFORMES_MARKER);
   const header = headerEnd === -1 ? content : content.slice(0, headerEnd);
-  const m = header.match(/(\d{2})\/(\d{2})\/(\d{4})/);
-  if (!m) return null;
-  const [, dd, mm, yyyy] = m;
-  return `${yyyy}-${mm}-${dd}`;
+
+  const iso = header.match(/(\d{4})-(\d{2})-(\d{2})/);
+  if (iso) {
+    const [, yyyy, mm, dd] = iso;
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  const br = header.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+  if (br) {
+    const [, dd, mm, yyyy] = br;
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  return null;
 }
 
 // Only the "PRs NÃO CONFORMES" block is ever used. "Verificar manualmente" is
