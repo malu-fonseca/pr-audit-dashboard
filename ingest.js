@@ -14,6 +14,12 @@ function deepEqual(a, b) {
 
 async function main() {
   const record = await fetchAndParse();
+  if (!record.date) {
+    throw new Error(
+      `Não consegui extrair a data da mensagem (messageId=${record.messageId}). ` +
+        'O formato do cabeçalho deve ter mudado de novo — não vou gravar um registro sem data.'
+    );
+  }
   const history = JSON.parse(fs.readFileSync(HISTORY_PATH, 'utf8'));
 
   const existingIndex = history.findIndex((d) => d.date === record.date);
